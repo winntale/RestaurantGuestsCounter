@@ -1,0 +1,23 @@
+﻿@model ImageUploadViewModel
+
+<h2>Подсчёт гостей за столом</h2>
+
+<form asp-action="Index" asp-controller="Home" method="post" enctype="multipart/form-data">
+    <div>
+        <label>Загрузите изображение</label>
+        <input type="file" name="Image" />
+    </div>
+    <button type="submit">Обработать</button>
+</form>
+
+@if (Model != null && Model.GuestCount.HasValue)
+{
+    <hr />
+    <h3>Результат</h3>
+    <p>Количество гостей за столом: @Model.GuestCount</p>
+
+    @if (!string.IsNullOrEmpty(Model.SavedImagePath))
+    {
+        <img src="@Model.SavedImagePath" alt="Загруженное изображение" style="max-width:400px;" />
+    }
+}

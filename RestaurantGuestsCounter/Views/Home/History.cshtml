@@ -1,0 +1,48 @@
+@model IReadOnlyList<RestaurantGuestsCounter.Domain.PeopleCountingRequestLog>
+
+<h2>История запросов</h2>
+
+<style>
+    table.history-table {
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    table.history-table th,
+    table.history-table td {
+        border: 1px solid #ccc;
+        padding: 8px 12px;
+        text-align: left;
+    }
+
+    table.history-table th {
+        background-color: #f5f5f5;
+    }
+</style>
+
+@if (Model == null || !Model.Any())
+{
+    <p>История пуста.</p>
+}
+else
+{
+    <table class="history-table">
+        <thead>
+        <tr>
+            <th>Время</th>
+            <th>Файл</th>
+            <th>Гостей</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Timestamp.ToLocalTime()</td>
+                <td>@item.FileName</td>
+                <td>@item.GuestCount</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
