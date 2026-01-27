@@ -1,0 +1,17 @@
+@model RestaurantGuestsCounter.Domain.PeopleCountingStatistics
+
+<h2>Статистика по запросам</h2>
+
+@if (Model.TotalRequests == 0)
+{
+    <p>Пока нет данных для статистики.</p>
+}
+else
+{
+    <ul>
+        <li>Всего запросов: @Model.TotalRequests</li>
+        <li>Среднее число гостей: @Model.AverageGuests.ToString("0.00")</li>
+        <li>Максимум гостей: @Model.MaxGuests</li>
+        <li>Минимум гостей: @Model.MinGuests</li>
+    </ul>
+}

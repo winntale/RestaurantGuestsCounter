@@ -10,17 +10,26 @@ public class HomeController : Controller
     private readonly IWebHostEnvironment _env;
     private readonly IPeopleCountingService _peopleCountingService;
     private readonly IRequestHistoryService _historyService;
+    private readonly IStatisticsService _statisticsService;
 
     public HomeController(
         IWebHostEnvironment env,
         IPeopleCountingService peopleCountingService,
-        IRequestHistoryService historyService)
+        IRequestHistoryService historyService,
+        IStatisticsService statisticsService)
     {
         _env = env;
         _peopleCountingService = peopleCountingService;
         _historyService = historyService;
+        _statisticsService = statisticsService;
     }
-
+    
+    [HttpGet]
+    public IActionResult Index()
+    {
+        return View(new ImageUploadViewModel());
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Index(ImageUploadViewModel model)
     {
@@ -76,8 +85,32 @@ public class HomeController : Controller
     }
     
     [HttpGet]
-    public IActionResult Index()
+    public async Task<IActionResult> Stats()
     {
-        return View(new ImageUploadViewModel());
+        var stats = await _statisticsService.GetStatisticsAsync();
+        return View(stats);
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> DownloadCsvReport()
+    {
+        var items = await _historyService.GetAllAsync();
+
+        var sb = new System.Text.StringBuilder();
+        // Заголовок
+        sb.AppendLine("Timestamp,FileName,GuestCount");
+
+        foreach (var item in items)
+        {
+            var time = item.Timestamp.ToLocalTime().ToString("s"); // ISO-формат
+            var line = $"{time},{item.FileName},{item.GuestCount}";
+            sb.AppendLine(line);
+        }
+
+        var bytes = System.Text.Encoding.UTF8.GetBytes(sb.ToString());
+        var outputFileName = $"people_count_report_{DateTime.UtcNow:yyyyMMddHHmmss}.csv";
+
+        return File(bytes, "text/csv", outputFileName);
+    }
+
 }

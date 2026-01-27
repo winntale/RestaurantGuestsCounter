@@ -5,8 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IPeopleCountingService, DummyPeopleCountingService>();
 builder.Services.AddScoped<IRequestHistoryService, FileRequestHistoryService>();
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+//builder.Services.AddScoped<IPeopleCountingService, DummyPeopleCountingService>();
+builder.Services.AddScoped<IPeopleCountingService, OnnxPeopleCountingService>();
 
 
 var app = builder.Build();
