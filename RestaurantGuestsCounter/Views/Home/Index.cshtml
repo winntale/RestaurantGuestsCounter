@@ -16,8 +16,14 @@
     <h3>Результат</h3>
     <p>Количество гостей за столом: @Model.GuestCount</p>
 
-    @if (!string.IsNullOrEmpty(Model.SavedImagePath))
+    @if (!string.IsNullOrEmpty(Model.ProcessedImagePath))
     {
-        <img src="@Model.SavedImagePath" alt="Загруженное изображение" style="max-width:400px;" />
+        <h4>Обнаруженные гости</h4>
+        <img src="@Model.ProcessedImagePath" alt="Детекции гостей" style="max-width:600px;" />
+    }
+    else if (!string.IsNullOrEmpty(Model.SavedImagePath))
+    {
+        <h4>Исходное изображение</h4>
+        <img src="@Model.SavedImagePath" alt="Загруженное изображение" style="max-width:600px;" />
     }
 }

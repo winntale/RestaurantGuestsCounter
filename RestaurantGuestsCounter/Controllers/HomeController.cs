@@ -59,11 +59,9 @@ public class HomeController : Controller
         model.SavedImagePath = "/uploads/" + safeFileName;
 
 
-        // 1. считаем гостей
         var guestCount = _peopleCountingService.CountGuests(filePath);
         model.GuestCount = guestCount;
 
-        // логируем именно safeFileName
         var logEntry = new PeopleCountingRequestLog
         {
             Timestamp = DateTime.UtcNow,
@@ -97,12 +95,11 @@ public class HomeController : Controller
         var items = await _historyService.GetAllAsync();
 
         var sb = new System.Text.StringBuilder();
-        // Заголовок
         sb.AppendLine("Timestamp,FileName,GuestCount");
 
         foreach (var item in items)
         {
-            var time = item.Timestamp.ToLocalTime().ToString("s"); // ISO-формат
+            var time = item.Timestamp.ToLocalTime().ToString("s");
             var line = $"{time},{item.FileName},{item.GuestCount}";
             sb.AppendLine(line);
         }
@@ -112,5 +109,4 @@ public class HomeController : Controller
 
         return File(bytes, "text/csv", outputFileName);
     }
-
 }
